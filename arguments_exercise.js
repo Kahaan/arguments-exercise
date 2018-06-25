@@ -59,3 +59,37 @@ Function.prototype.curry = function (numArgs) {
 
   return _curriedFn;
 };
+
+Function.prototype.curry1 = function (numArgs) {
+  const args = [];
+  const fn = this;
+  function _curriedFn(arg) {
+    args.push(arg);
+    if (args.length === numArgs) {
+      return fn.apply(null, args);
+    } else {
+      return _curriedFn;
+    }
+  }
+  return _curriedFn;
+};
+
+/**
+ * With ES6 arrow functions
+ * Notice we dont need to keep track of the `this` context (const fn = this).
+ * An arrow function does not have its own `this`,
+ * the `this` value of the enclosing execution context is used.
+ */
+Function.prototype.curry2 = function (nArg) {
+  const argArray = [];
+  const _curriedFn = (arg) => {
+    argArray.push(arg);
+    if (argArray.length === nArg) {
+      // spreading the array into individual arguments
+      return this(...argArray);
+    } else {
+      return _curriedFn;
+    }
+  };
+  return _curriedFn;
+};
